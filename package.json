@@ -1,0 +1,16 @@
+{
+  "name": "full-stack-assignment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@cloudflare/workers-types": "^4.20241022.0",
+    "uuid": "^11.0.1"
+  }
+}

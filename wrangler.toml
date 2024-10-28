@@ -1,0 +1,6 @@
+name = "notification-service"
+compatibility_date = "2024-01-01"
+
+kv_namespaces = [
+  { binding = "NOTIFICATIONS_KV", id = "your-kv-namespace-id" }
+]
