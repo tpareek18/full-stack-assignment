@@ -80,6 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (server_respose.ok) {
                 notif_form.reset();
+
+                await getNotifs();
             }
         } catch (error) {
             console.error('Can\'t send notification', error);
