@@ -51,7 +51,7 @@ export async function onRequest(context) {
         switch (request.method) {
             case 'GET':
                 const notifications = await retrieveNotifsFromKVStore(env);
-                return new Response(JSON.stringify(notifications), {
+                return new Response(JSON.stringify(notifications, null, 2), {
                     headers: {
                     'Content-Type': 'application/json',
                     ...manageCORSForRequests()
@@ -81,7 +81,7 @@ export async function onRequest(context) {
                 const updatedNotifications = [...existingNotifications, ...processedNotifications];
                 await env.NOTIFICATIONS_KV.put('notifications', JSON.stringify(updatedNotifications));
 
-                return new Response(JSON.stringify(processedNotifications), {
+                return new Response(JSON.stringify(processedNotifications, null, 2), {
                     headers: {
                         'Content-Type': 'application/json',
                         ...manageCORSForRequests()
