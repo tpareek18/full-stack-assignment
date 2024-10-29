@@ -51,7 +51,7 @@ export async function onRequest(context) {
                 const notificationsToCreate = Array.isArray(body) ? body : [body];
 
                 if (!notificationsToCreate.every(validateNotification)) {
-                    return new Response('Request body is malinformed', {status: 400});
+                    return outputJSONResponse('Request body is malinformed', 400);
                 }
                 
                 const existingNotifications = await retrieveNotifsFromKVStore(env);
