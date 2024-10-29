@@ -12,27 +12,48 @@ body {
 }
 
 .container {
-    max-width: 600px;
+    max-width: 1200px;
     margin: 0 auto;
-    background: hsl(0, 0%, 100%);
-    padding: 20px;
-    border-radius: 8px;
+    display: flex;
+    gap: 20px;
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: hsl(0, 0%, 2%);
+.notification-panel {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid hsl(0, 0%, 80%);
+    padding: 16px;
+    width: 400px;
 }
 
-.form-group {
+.form-container {
+    width: 100%;
+}
+
+#notification-form {
+    display: flex;
+    flex-direction: column;
+}
+
+h2 {
+    font-size: 1.2rem;
     margin-bottom: 15px;
+    color: hsl(0, 1%, 24%)
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
-    color: hsl(0, 0%, 2%);
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid hsl(0, 0%, 80%);
+    border-radius: 4px;
+    min-height: 80px;
+    resize: none;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+textarea::placeholder {
+    color:hsl(0, 0%, 14%)
 }
 
 select {
@@ -41,20 +62,24 @@ select {
     border: 1px solid hsl(0, 0%, 80%);
     border-radius: 4px;
     background-color: hsl(0, 0%, 100%);
+    cursor: pointer;
 }
 
 button {
-    display: block;
     width: 100%;
     padding: 10px;
-    border: none;
+    border: 1px solid hsl(0, 0%, 80%);
     border-radius: 4px;
-    background-color: hsl(144, 88%, 54%);
-    color: hsl(0, 0%, 100%);
+    background-color: hsl(180, 20%, 99%);
+    color: hsl(0, 0%, 2%);
     cursor: pointer;
     font-size: 16px;
 }
 
+#send-notification-btn {
+    margin-top: 5rem;
+}
+
 button:hover {
-    background-color: hsl(125, 90%, 28%);
+    background-color: hsl(120, 1%, 43%);
 }

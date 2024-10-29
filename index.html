@@ -8,24 +8,27 @@
 </head>
 <body>
     <div class="container">
-        <h1>Create Notification</h1>
-        <form id="notification-form">
-            <div class="form-group">
-                <label for="notification-message">Message...</label>
-                <textarea id="notification-message" required placeholder="Message..."></textarea>
-            </div>
-            <div class="form-group"></div>
-                <label for="notification-type">Type</label>
-                <select id="notification-type" required>
-                    <option value="">Choose Type</option>
-                    <option value="alert">Alert</option>
-                    <option value="info">Info</option>
-                    <option value="success">Success</option>
-                </select>
-            </div>
+        <div class="notification-panel">
+            <div class="form-container">
+                <h2>Create Notification</h2>
+                <form id="notification-form">
+                    <div class="form-group">
+                        <textarea id="notification-message" required placeholder="Message..."></textarea>
+                    </div>
 
-            <button type="submit" id="send-notification-btn">Send</button>
-        </form>
+                    <div class="form-group"></div>
+                        <select id="notification-type" required>
+                            <option value="">Choose Type</option>
+                            <option value="alert">Alert</option>
+                            <option value="info">Info</option>
+                            <option value="success">Success</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" id="send-notification-btn">Send</button>
+                </form>
+            </div>
+        </div>
     </div>
     <script src="index.js"></script>
 </body>
