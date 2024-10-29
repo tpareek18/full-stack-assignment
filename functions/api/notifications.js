@@ -1,18 +1,19 @@
+// Pages not allowing to import uuid, found crypto API to use instead
 function generateUUID() {
     return crypto.randomUUID();
 }
 
-function manageCORSForRequests() { 
-    return {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'
-    };
-}
+// function manageCORSForRequests() { 
+//     return {
+//         'Access-Control-Allow-Origin': '*',
+//         'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+//         'Access-Control-Allow-Headers': 'Content-Type'
+//     };
+// }
 
-async function authenticateRequest(request) {
-    return true;
-}
+// async function authenticateRequest(request) {
+//     return true;
+// }
 
 function validateNotification(notification) {
     return (notification && 
@@ -36,16 +37,16 @@ export async function onRequest(context) {
     const { request, env } = context;
 
     // Manage CORS
-    if (request.method === 'OPTIONS') {
-        return new Response(null, {
-            headers: manageCORSForRequests()
-        });
-    }
+    // if (request.method === 'OPTIONS') {
+    //     return new Response(null, {
+    //         headers: manageCORSForRequests()
+    //     });
+    // }
 
-    const isAuthenticated = await authenticateRequest(request);
-    if (!isAuthenticated) {
-        return new Response('Unauthorized', { status: 401 });
-    }
+    // const isAuthenticated = await authenticateRequest(request);
+    // if (!isAuthenticated) {
+    //     return new Response('Unauthorized', { status: 401 });
+    // }
 
     try {
         switch (request.method) {
@@ -54,7 +55,6 @@ export async function onRequest(context) {
                 return new Response(JSON.stringify(notifications, null, 2), {
                     headers: {
                     'Content-Type': 'application/json',
-                    ...manageCORSForRequests()
                     }
                 });
     
@@ -84,7 +84,6 @@ export async function onRequest(context) {
                 return new Response(JSON.stringify(processedNotifications, null, 2), {
                     headers: {
                         'Content-Type': 'application/json',
-                        ...manageCORSForRequests()
                     }
                 });
     
@@ -95,7 +94,6 @@ export async function onRequest(context) {
                 }), {
                     headers: {
                     'Content-Type': 'application/json',
-                    ...manageCORSForRequests()
                     }
                 });
     
