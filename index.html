@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Create Notification</h1>
+        <form id="notification-form">
+            <div class="form-group">
+                <label for="notification-message">Message...</label>
+                <textarea id="notification-message" required placeholder="Message..."></textarea>
+            </div>
+            <div class="form-group"></div>
+                <label for="notification-type">Type</label>
+                <select id="notification-type" required>
+                    <option value="">Choose Type</option>
+                    <option value="alert">Alert</option>
+                    <option value="info">Info</option>
+                    <option value="success">Success</option>
+                </select>
+            </div>
+
+            <button type="submit" id="send-notification-btn">Send</button>
+        </form>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>
