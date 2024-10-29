@@ -1,6 +1,10 @@
-import {
-    v4 as uuidv4
-} from 'uuid';
+// import {
+//     v4 as uuidv4
+// } from 'uuid';
+
+function generateUUID() {
+    return crypto.randomUUID();
+}
 
 function manageCORSForRequests() { 
     return {
@@ -74,7 +78,7 @@ export async function onRequest(context) {
                 // Process new notifications
                 const processedNotifications = notificationsToCreate.map(notification => ({
                 ...notification,
-                id: uuidv4(),
+                id: generateUUID(),
                 timestamp: Date.now()
                 }));
 
