@@ -20,12 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function getNotifs() {
         try {
-            const server_respose = await fetch('/api/notifications');
-            if (! server_respose.ok) {
+            const server_response = await fetch('/api/notifications');
+            if (! server_response.ok) {
                 throw new Error('Failed to fetch notifications');
             }
 
-            const notifications = await response.json();
+            const notifications = await server_response.json();
 
             const sortedNotifications = notifications
                 .filter(notification => !notification.read)
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 await getNotifs();
             }
         } catch (error) {
-            console.error('Can\'t send notification', error);
+            console.error('Cannot send notification', error);
         }
     });
 });
