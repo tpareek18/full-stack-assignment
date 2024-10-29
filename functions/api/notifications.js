@@ -3,6 +3,7 @@ function generateUUID() {
     return crypto.randomUUID();
 }
 
+// validate request body, if false, return 400
 function validateNotification(notification) {
     return (notification && 
         ['alert', 'info', 'success'].includes(notification.type) &&
@@ -11,16 +12,31 @@ function validateNotification(notification) {
     );
 }
 
+// retrieves all the notifications from KV storage
 async function retrieveNotifsFromKVStore(env) {
     const notifications = await env.NOTIFICATIONS_KV.get('notifications', 'json');
-    return notifications || [];
+    if (notifications) {
+        return notifications;
+    }
+    return [];
 }
 
-async function deleteNotifsFromKV(env) {
+// deletes all the notifications from KV storage
+async function deleteNotifsFromKVStore(env) {
     await env.NOTIFICATIONS_KV.delete('notifications');
     return true;
 }
 
+function outputJSONResponse(body, status=200) {
+    return new Response(JSON.stringify(body, null, 2), {
+        status: status,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+}
+
+// main function that handles the different requests
 export async function onRequest(context) {
     const { request, env } = context;
 
@@ -28,23 +44,18 @@ export async function onRequest(context) {
         switch (request.method) {
             case 'GET':
                 const notifications = await retrieveNotifsFromKVStore(env);
-                return new Response(JSON.stringify(notifications, null, 2), {
-                    headers: {
-                    'Content-Type': 'application/json',
-                    }
-                });
+                return outputJSONResponse(notifications);
     
             case 'POST':
                 const body = await request.json();
                 const notificationsToCreate = Array.isArray(body) ? body : [body];
 
                 if (!notificationsToCreate.every(validateNotification)) {
-                    return new Response('Invalid notification format', { status: 400 });
+                    return new Response('Request body is malinformed', {status: 400});
                 }
                 
-                const existingNotifications = await env.NOTIFICATIONS_KV.get('notifications', 'json') || [];
-
-                const processedNotifications = notificationsToCreate.map(notification => ({
+                const existingNotifications = await retrieveNotifsFromKVStore(env);
+                const newNotifications = notificationsToCreate.map(notification => ({
                     id: generateUUID(),
                     type: notification.type,
                     content: {
@@ -54,24 +65,13 @@ export async function onRequest(context) {
                     timestamp: Date.now()
                 }));
 
-                const updatedNotifications = [...existingNotifications, ...processedNotifications];
+                const updatedNotifications = [...existingNotifications, ...newNotifications];
                 await env.NOTIFICATIONS_KV.put('notifications', JSON.stringify(updatedNotifications));
-
-                return new Response(JSON.stringify(processedNotifications, null, 2), {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
+                return outputJSONResponse(newNotifications);
     
             case 'DELETE':
-                await deleteNotifsFromKV(env);
-                return new Response(JSON.stringify({
-                    message: 'Notifications deleted successfully!'
-                }), {
-                    headers: {
-                    'Content-Type': 'application/json',
-                    }
-                });
+                await deleteNotifsFromKVStore(env);
+                return outputJSONResponse({message: 'Notifications deleted successfully!'});
     
             default:
                 return new Response('Method not allowed', { status: 405 });
