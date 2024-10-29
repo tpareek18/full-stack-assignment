@@ -1,7 +1,3 @@
-// import {
-//     v4 as uuidv4
-// } from 'uuid';
-
 function generateUUID() {
     return crypto.randomUUID();
 }
@@ -40,7 +36,6 @@ export async function onRequest(context) {
     const { request, env } = context;
 
     // Manage CORS
-
     if (request.method === 'OPTIONS') {
         return new Response(null, {
             headers: manageCORSForRequests()
@@ -67,31 +62,30 @@ export async function onRequest(context) {
                 const body = await request.json();
                 const notificationsToCreate = Array.isArray(body) ? body : [body];
 
-                // Validate notifications
                 if (!notificationsToCreate.every(validateNotification)) {
-                return new Response('Invalid notification format', { status: 400 });
+                    return new Response('Invalid notification format', { status: 400 });
                 }
-
-                // Get existing notifications
+                
                 const existingNotifications = await env.NOTIFICATIONS_KV.get('notifications', 'json') || [];
 
-                // Process new notifications
                 const processedNotifications = notificationsToCreate.map(notification => ({
-                ...notification,
-                id: generateUUID(),
-                timestamp: Date.now()
+                    id: generateUUID(),
+                    type: notification.type,
+                    content: {
+                        text: notification.content.text
+                    },
+                    read: notification.read,
+                    timestamp: Date.now()
                 }));
 
-                // Combine and store notifications
                 const updatedNotifications = [...existingNotifications, ...processedNotifications];
                 await env.NOTIFICATIONS_KV.put('notifications', JSON.stringify(updatedNotifications));
 
-                // Return the notification response as Array
                 return new Response(JSON.stringify(processedNotifications), {
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...manageCORSForRequests()
-                }
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...manageCORSForRequests()
+                    }
                 });
     
             case 'DELETE':
