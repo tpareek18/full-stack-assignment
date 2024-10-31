@@ -3,15 +3,6 @@ function generateUUID() {
     return crypto.randomUUID();
 }
 
-// validate request body, if false, return 400
-function validateNotification(notification) {
-    return (notification && 
-        ['alert', 'info', 'success'].includes(notification.type) &&
-        notification.content?.text &&
-        typeof notification.read === 'boolean'
-    );
-}
-
 // retrieves all the notifications from KV storage
 async function retrieveNotifsFromKVStore(env) {
     const notifications = await env.NOTIFICATIONS_KV.get('notifications', 'json');
@@ -50,8 +41,13 @@ export async function onRequest(context) {
                 const body = await request.json();
                 const notificationsToCreate = Array.isArray(body) ? body : [body];
 
-                if (!notificationsToCreate.every(validateNotification)) {
-                    return outputJSONResponse('Request body is malformed', 400);
+                for (const notification of notificationsToCreate) {
+                    if (!(notification && 
+                        ['alert', 'info', 'success'].includes(notification.type) &&
+                        notification.content?.text &&
+                        typeof notification.read === 'boolean')) {
+                            return outputJSONResponse('Request body is malformed', 400);
+                        }
                 }
                 
                 const existingNotifications = await retrieveNotifsFromKVStore(env);
@@ -65,7 +61,7 @@ export async function onRequest(context) {
                     timestamp: Date.now()
                 }));
 
-                const updatedNotifications = [...existingNotifications, ...newNotifications];
+                const updatedNotifications = existingNotifications.concat(newNotifications);
                 await env.NOTIFICATIONS_KV.put('notifications', JSON.stringify(updatedNotifications));
                 return outputJSONResponse(newNotifications);
     
@@ -74,13 +70,10 @@ export async function onRequest(context) {
                 return outputJSONResponse({message: 'Notifications deleted successfully!'});
     
             default:
-                return new Response('Method not allowed', { status: 405 });
+                return new Response('Method not allowed');
         }
     } catch (error) {
         console.error('Error processing request:', error);
-        return new Response('Internal Server Error', { 
-            status: 500,
-            headers: manageCORSForRequests()
-        });
+        return new Response('Internal Server Error', {status: 500});
     }
 }
