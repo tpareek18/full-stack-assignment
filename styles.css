@@ -124,6 +124,7 @@ button:hover {
 .notification-timestamp {
     font-size: 12px;
     color: #3f3f3f;
+    margin-top: auto;
 }
 
 /* mobile view - stack vertically */

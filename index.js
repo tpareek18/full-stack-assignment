@@ -4,10 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const notif_feed = document.getElementById('notification-feed');
 
     // Time stamp function
+    // 22 Jun 2024, 4:30pm
+    // fix space between time and am/pm
     function createTimestamp(timestamp) {
         const date = new Date(timestamp);
         return `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })} ${date.getFullYear()}, 
-        ${date.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase()}`;
+        ${date.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).replace(' ', '').toLowerCase()}`;
     }
 
     async function getNotifs() {
