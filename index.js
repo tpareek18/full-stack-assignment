@@ -4,18 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const notif_feed = document.getElementById('notification-feed');
 
     // Time stamp function
-    function formatTimestamp(timestamp) {
+    function createTimestamp(timestamp) {
         const date = new Date(timestamp);
-        const day = date.getDate();
-        const month = date.toLocaleString('default', { month: 'short' });
-        const year = date.getFullYear();
-        const time = date.toLocaleString('en-US', { 
-            hour: 'numeric', 
-            minute: '2-digit', 
-            hour12: true 
-        }).toLowerCase();
-        
-        return `${day} ${month} ${year}, ${time}`;
+        return `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })} ${date.getFullYear()}, 
+        ${date.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase()}`;
     }
 
     async function getNotifs() {
@@ -26,28 +18,30 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const notifications = await server_response.json();
-
-            const sortedNotifications = notifications
-                .filter(notification => !notification.read)
-                .sort((a, b) => b.timestamp - a.timestamp);
-
+            const sortedNotifications = [];
+            for (const notification of notifications) {
+                if (!notification.read) {
+                    sortedNotifications.push(notification);
+                }
+            }
+            sortedNotifications.sort((i, j) => j.timestamp - i.timestamp);
             notif_feed.innerHTML = '';
 
             sortedNotifications.forEach(notification => {
-                const card = document.createElement('div');
-                card.className = `notification-card ${notification.type}`;
+                const notification_card = document.createElement('div');
+                notification_card.className = `notification-card ${notification.type}`;
 
-                const message = document.createElement('p');
-                message.className = 'notification-message';
-                message.textContent = notification.content.text;
+                const notification_message = document.createElement('p');
+                notification_message.className = 'notification-notification_message';
+                notification_message.textContent = notification.content.text;
 
                 const timestamp = document.createElement('div');
                 timestamp.className = 'notification-timestamp';
-                timestamp.textContent = formatTimestamp(notification.timestamp);
+                timestamp.textContent = createTimestamp(notification.timestamp);
 
-                card.appendChild(message);
-                card.appendChild(timestamp);
-                notif_feed.appendChild(card);
+                notification_card.appendChild(notification_message);
+                notification_card.appendChild(timestamp);
+                notif_feed.appendChild(notification_card);
             });
         } catch (error) {
             console.error('Cannot send notification', error);
@@ -80,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (server_respose.ok) {
                 notif_form.reset();
-
                 await getNotifs();
             }
         } catch (error) {
