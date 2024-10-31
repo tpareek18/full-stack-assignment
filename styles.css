@@ -116,12 +116,12 @@ button:hover {
 
 .notification-message {
     margin: 0;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 1.4;
 }
 
 .notification-timestamp {
-    font-size: 10px;
+    font-size: 12px;
     color: #3f3f3f;
     margin-top: auto
 }
