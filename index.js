@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 notification_card.className = `notification-card ${notification.type}`;
 
                 const notification_message = document.createElement('p');
-                notification_message.className = 'notification-notification_message';
+                notification_message.className = 'notification-message';
                 notification_message.textContent = notification.content.text;
 
                 const timestamp = document.createElement('div');
